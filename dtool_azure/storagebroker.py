@@ -210,8 +210,6 @@ class AzureStorageBroker(object):
 
         identifier = generate_identifier(relpath)
 
-        print("PUTTING {} as {}".format(relpath, identifier))
-
         self._blobservice.create_blob_from_path(
             self.uuid,
             identifier,
