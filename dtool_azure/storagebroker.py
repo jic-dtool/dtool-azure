@@ -135,6 +135,11 @@ class AzureStorageBroker(object):
             self.uuid
         )
 
+
+    def get_readme_content(self):
+
+        return self.get_text(self.readme_key)
+
     def has_admin_metadata(self):
         """Return True if the administrative metadata exists.
 
@@ -312,13 +317,14 @@ class AzureStorageBroker(object):
         # original_path = self.item_properties(identifier)['path']
 
 
-    def get_readme_content(self):
-
-        return self.get_text(self.readme_key)
-
     def put_manifest(self, manifest):
+        """Store the manifest by writing it to Azure.
 
-        print('PUT MANIFEST', manifest)
+        It is the client's responsibility to ensure that the manifest provided
+        is a dictionary with valid contents.
+
+        :param manifest: dictionary with manifest structural metadata
+        """
         self.store_text('manifest.json', json.dumps(manifest))
 
     def iter_item_handles(self):
@@ -372,6 +378,7 @@ class AzureStorageBroker(object):
             prefix=self.fragments_key_prefix
         )
 
+        # Delete the temporary fragment metadata objects from the bucket.
         for blob in blob_generator:
             self._blobservice.delete_blob(self.uuid, blob.name)
 
