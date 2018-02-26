@@ -403,7 +403,6 @@ class AzureStorageBroker(object):
         )
 
         for blob in blob_generator:
-            print('CHECK {}'.format(blob.name))
             metadata_key = blob.name.split('.')[-2]
             value_as_string = self.get_text(blob.name)
             value = json.loads(value_as_string)
