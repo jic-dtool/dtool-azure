@@ -31,15 +31,17 @@ class AzureStorageBroker(object):
     #: Attribute used to define the type of storage broker.
     key = "azure"
 
+    #: Attribute used by :class:`dtoolcore.ProtoDataSet` to write the hash
+    #: function name to the manifest.
     hasher = FileHasher(md5sum_hexdigest)
 
     def __init__(self, uri, config_path=None):
 
         parse_result = generous_parse_uri(uri)
 
-        self.collection_name = parse_result.netloc
+        self.storage_account = parse_result.netloc
 
-        uuid = parse_result.netloc
+        uuid = parse_result.path[1:]
 
         self.uuid = uuid
 
@@ -78,7 +80,7 @@ class AzureStorageBroker(object):
         assert scheme == 'azure'
 
         # Force path (third component of tuple) to be the dataset UUID
-        uri = urlunparse((scheme, uuid, _, _, _, _))
+        uri = urlunparse((scheme, netloc, uuid, _, _, _))
 
         return uri
 
@@ -131,7 +133,7 @@ class AzureStorageBroker(object):
 
     def get_admin_metadata(self):
 
-         return self._blobservice.get_container_metadata(
+        return self._blobservice.get_container_metadata(
             self.uuid
         )
 
