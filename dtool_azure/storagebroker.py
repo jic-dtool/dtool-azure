@@ -26,6 +26,36 @@ def base64_to_hex(input_string):
     return binascii.hexlify(base64.b64decode(input_string)).decode()
 
 
+_DTOOL_README_TXT = """README
+======
+This is a Dtool dataset stored in Azure storage.
+
+Content provided during the dataset creation process
+----------------------------------------------------
+
+Azure container named $UUID, where UUID is the unique identifier for the
+dataset.
+
+Dataset descriptive metadata: README.yml
+
+Dataset items. The keys for these blobs are item identifiers. An item identifier
+is the sha1sum hexdigest of the relative path used to represent the file on
+traditional file system disk.
+
+Administrative metadata describing the dataset is encoded as metadata on the
+container.
+
+
+Automatically generated blobs
+-----------------------------
+
+This file: README.txt
+Structural metadata describing the dataset: structure.json
+Structural metadata describing the data items: manifest.json
+Per item descriptive metadata prefixed by: overlays/
+"""
+
+
 class AzureStorageBroker(object):
 
     #: Attribute used to define the type of storage broker.
