@@ -1,5 +1,6 @@
 
 import os
+import json
 
 import pytest
 
@@ -11,6 +12,30 @@ from dtool_azure.storagebroker import (
 
 _HERE = os.path.dirname(__file__)
 TEST_SAMPLE_DATA = os.path.join(_HERE, "data")
+
+
+def _key_exists_in_storage_broker(storage_broker, key):
+
+    return storage_broker._blobservice.exists(storage_broker.uuid, key)
+
+
+def _get_data_structure_from_key(storage_broker, key):
+
+    text_blob = storage_broker._blobservice.get_blob_to_text(
+        storage_broker.uuid,
+        key
+    )
+
+    return json.loads(text_blob.content)
+
+def _get_unicode_from_key(storage_broker, key):
+
+    text_blob = storage_broker._blobservice.get_blob_to_text(
+        storage_broker.uuid,
+        key
+    )
+
+    return text_blob.content
 
 def _remove_dataset(uri):
 

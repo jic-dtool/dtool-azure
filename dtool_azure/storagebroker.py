@@ -25,6 +25,15 @@ def base64_to_hex(input_string):
 
     return binascii.hexlify(base64.b64decode(input_string)).decode()
 
+_STRUCTURE_PARAMETERS = {
+    "fragments_key_prefix": "fragments/",
+    "overlays_key_prefix": "overlays/",
+    "dataset_readme_key": "README.yml",
+    "manifest_key": "manifest.json",
+    "structure_dict_key": "structure.json",
+    "dtool_readme_key": "README.txt"
+
+}
 
 _DTOOL_README_TXT = """README
 ======
@@ -75,9 +84,6 @@ class AzureStorageBroker(object):
 
         self.uuid = uuid
 
-        self.fragments_key_prefix = "fragments/"
-        self.overlays_key_prefix = "overlays/"
-        self.readme_key = 'README.yml'
 
         self._azure_cache_abspath = get_config_value(
             "DTOOL_AZURE_CACHE_DIRECTORY",
@@ -100,8 +106,20 @@ class AzureStorageBroker(object):
             account_key=account_key
         )
 
-        # self._set_prefixes()
+        self._set_prefixes()
 
+    def _set_prefixes(self):
+
+        def generate_key(structure_dict_key):
+            return _STRUCTURE_PARAMETERS[structure_dict_key]
+
+        self.fragments_key_prefix = generate_key('fragments_key_prefix')
+        self.overlays_key_prefix = generate_key('overlays_key_prefix')
+
+        self.dtool_readme_key = generate_key("dtool_readme_key")
+        self.dataset_readme_key = generate_key("dataset_readme_key")
+        self.manifest_key = generate_key("manifest_key")
+        self.structure_dict_key = generate_key("structure_dict_key")
 
     @classmethod
     def generate_uri(cls, name, uuid, base_uri):
@@ -151,6 +169,16 @@ class AzureStorageBroker(object):
 
         self._blobservice.create_container(self.uuid)
 
+        self.store_text(
+            self.structure_dict_key,
+            json.dumps(_STRUCTURE_PARAMETERS)
+        )
+
+        self.store_text(
+            self.dtool_readme_key,
+            _DTOOL_README_TXT
+        )
+
     def put_admin_metadata(self, admin_metadata):
 
         for k, v in admin_metadata.items():
@@ -170,7 +198,7 @@ class AzureStorageBroker(object):
 
     def get_readme_content(self):
 
-        return self.get_text(self.readme_key)
+        return self.get_text(self.dataset_readme_key)
 
     def has_admin_metadata(self):
         """Return True if the administrative metadata exists.
@@ -236,7 +264,7 @@ class AzureStorageBroker(object):
 
     def put_readme(self, content):
 
-        self.store_text(self.readme_key, content)
+        self.store_text(self.dataset_readme_key, content)
 
     def put_item(self, fpath, relpath):
 
