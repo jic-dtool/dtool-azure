@@ -1,6 +1,6 @@
 from setuptools import setup
 
-url = ""
+url = "https://github.com/jic-dtool/dtool-azure"
 version = "0.1.0"
 readme = open('README.rst').read()
 
@@ -15,9 +15,7 @@ setup(
     author_email="Matthew.Hartley@jic.ac.uk",
     url=url,
     install_requires=[
-        "click",
-        "dtoolcore",
-        "pygments",
+        "dtoolcore>=3.0",
         "azure-storage"
     ],
     entry_points={
