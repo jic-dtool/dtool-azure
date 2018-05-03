@@ -1,6 +1,6 @@
 from dtoolcore import  DataSet
 
-def test_httpenable():
+def test_http_manifest():
 
     uri = "azure://jicinformatics/04c4e3a4-f072-4fc1-881a-602d589b089a"
 
@@ -19,3 +19,13 @@ def test_httpenable():
     assert set(http_manifest["item_urls"].keys()) == set(dataset.identifiers)
 
     dataset._storage_broker.write_http_manifest(http_manifest)
+
+def test_http_enable():
+
+    uri = "azure://jicinformatics/8e65e5ee-a5c7-4a0e-bc2d-a47f8c3a6809"
+
+    dataset = DataSet.from_uri(uri)
+
+    access_url = dataset._storage_broker.http_enable()
+
+    assert access_url.startswith("https://")

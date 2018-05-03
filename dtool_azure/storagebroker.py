@@ -8,7 +8,7 @@ try:
 except ImportError:
     from urllib.parse import urlunparse
 
-from azure.storage.blob import BlockBlobService
+from azure.storage.blob import BlockBlobService, PublicAccess
 from azure.common import AzureMissingResourceHttpError, AzureHttpError
 
 from dtoolcore.utils import (
@@ -486,6 +486,24 @@ class AzureStorageBroker(object):
         return metadata
 
     # For HTTP access
+
+    def http_enable(self):
+
+        http_manifest = self.generate_http_manifest()
+        self.write_http_manifest(http_manifest)
+
+        self._blobservice.set_container_acl(
+            self.uuid,
+            public_access=PublicAccess.Container
+        )
+
+        access_url = '{}://{}/{}'.format(
+            self._blobservice.protocol,
+            self._blobservice.primary_endpoint,
+            self.uuid
+        )
+
+        return access_url
 
     def generate_http_manifest(self):
 
