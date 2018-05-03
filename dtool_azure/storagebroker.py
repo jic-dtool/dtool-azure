@@ -31,8 +31,9 @@ _STRUCTURE_PARAMETERS = {
     "dataset_readme_key": "README.yml",
     "manifest_key": "manifest.json",
     "structure_dict_key": "structure.json",
-    "dtool_readme_key": "README.txt"
-
+    "dtool_readme_key": "README.txt",
+    "admin_metadata_key": "dtool",
+    "http_manifest_key": "http_manifest.json"
 }
 
 _DTOOL_README_TXT = """README
@@ -84,7 +85,6 @@ class AzureStorageBroker(object):
 
         self.uuid = uuid
 
-
         self._azure_cache_abspath = get_config_value(
             "DTOOL_AZURE_CACHE_DIRECTORY",
             config_path=config_path,
@@ -120,6 +120,10 @@ class AzureStorageBroker(object):
         self.dataset_readme_key = generate_key("dataset_readme_key")
         self.manifest_key = generate_key("manifest_key")
         self.structure_dict_key = generate_key("structure_dict_key")
+
+        self.admin_metadata_key = generate_key("admin_metadata_key")
+
+        self.http_manifest_key = generate_key("http_manifest_key")
 
     @classmethod
     def generate_uri(cls, name, uuid, base_uri):
@@ -167,7 +171,12 @@ class AzureStorageBroker(object):
 
     def create_structure(self):
 
-        self._blobservice.create_container(self.uuid)
+        result = self._blobservice.create_container(self.uuid)
+
+        if not result:
+            raise Exception(
+                "Container for {} already exists.".format(self.uuid)
+            )
 
         self.store_text(
             self.structure_dict_key,
@@ -187,6 +196,11 @@ class AzureStorageBroker(object):
         self._blobservice.set_container_metadata(
             self.uuid,
             admin_metadata
+        )
+
+        self.store_text(
+            self.admin_metadata_key,
+            json.dumps(admin_metadata)
         )
 
     def get_admin_metadata(self):
@@ -470,3 +484,50 @@ class AzureStorageBroker(object):
             metadata[metadata_key] = value
 
         return metadata
+
+    # For HTTP access
+
+    def generate_http_manifest(self):
+
+        readme_url = self._blobservice.make_blob_url(
+            self.uuid,
+            "README.yml"
+        )
+
+        manifest_url = self._blobservice.make_blob_url(
+            self.uuid,
+            "manifest.json"
+        )
+
+        overlays = {}
+        for overlay_name in self.list_overlay_names():
+            overlay_fpath = self.overlays_key_prefix + overlay_name + '.json'
+            overlays[overlay_name] = self._blobservice.make_blob_url(
+                self.uuid,
+                overlay_fpath
+            )
+
+        manifest = self.get_manifest()
+        item_urls = {}
+        for identifier in manifest["items"]:
+            item_urls[identifier] = self._blobservice.make_blob_url(
+                self.uuid,
+                identifier
+            )
+
+        http_manifest = {
+            "admin_metadata": self.get_admin_metadata(),
+            "item_urls": item_urls,
+            "overlays": overlays,
+            "readme_url": readme_url,
+            "manifest_url": manifest_url
+        }
+
+        return http_manifest
+
+    def write_http_manifest(self, http_manifest):
+
+        self.store_text(
+            self.http_manifest_key,
+            json.dumps(http_manifest)
+        )
