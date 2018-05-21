@@ -16,6 +16,7 @@ from dtoolcore.utils import (
     get_config_value,
     mkdir_parents,
     generous_parse_uri,
+    timestamp
 )
 
 from dtoolcore.filehasher import FileHasher, md5sum_hexdigest
@@ -428,12 +429,12 @@ class AzureStorageBroker(object):
         else:
             md5_hexdigest = base64_to_hex(md5_base64)
 
+        aware_datetime = blob.properties.last_modified
+        naive_datetime = aware_datetime.replace(tzinfo=None)
         properties = {
             'relpath': blob.metadata['relpath'],
             'size_in_bytes': blob.properties.content_length,
-            # NOTE - timezones are horrible and this doesn't take account of
-            # them
-            'utc_timestamp': blob.properties.last_modified.strftime("%s"),
+            'utc_timestamp': timestamp(naive_datetime),
             'hash': md5_hexdigest
         }
 
