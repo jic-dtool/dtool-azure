@@ -9,13 +9,15 @@ def test_http_manifest():
     http_manifest = dataset._storage_broker.generate_http_manifest()
 
     assert "admin_metadata" in http_manifest
-    assert "item_urls" in http_manifest
+    assert http_manifest["admin_metadata"] == dataset._admin_metadata
+
+
     assert "overlays" in http_manifest
     assert "readme_url" in http_manifest
     assert "manifest_url" in http_manifest
 
     # Check item urls
-
+    assert "item_urls" in http_manifest
     assert set(http_manifest["item_urls"].keys()) == set(dataset.identifiers)
 
     dataset._storage_broker.write_http_manifest(http_manifest)
