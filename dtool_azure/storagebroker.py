@@ -21,6 +21,8 @@ from dtoolcore.utils import (
 
 from dtoolcore.filehasher import FileHasher, md5sum_hexdigest
 
+from dtool_azure.utils import get_azure_account_key
+
 def base64_to_hex(input_string):
     """Retun the hex encoded version of the base64 encoded input string."""
 
@@ -80,7 +82,7 @@ class AzureStorageBroker(object):
 
         parse_result = generous_parse_uri(uri)
 
-        self.storage_account = parse_result.netloc
+        self.storage_account_name = parse_result.netloc
 
         uuid = parse_result.path[1:]
 
@@ -92,18 +94,13 @@ class AzureStorageBroker(object):
             default=os.path.expanduser("~/.cache/dtool/azure")
         )
 
-        account_name=get_config_value(
-            "DTOOL_AZURE_ACCOUNT_NAME",
-            config_path=os.path.expanduser("~/.config/dtoolazure/config.json")
-        )
-
-        account_key=get_config_value(
-            "DTOOL_AZURE_ACCOUNT_KEY",
-            config_path=os.path.expanduser("~/.config/dtoolazure/config.json")
+        account_key = get_azure_account_key(
+            self.storage_account_name,
+            config_path=config_path
         )
 
         self._blobservice = BlockBlobService(
-            account_name=account_name,
+            account_name=self.storage_account_name,
             account_key=account_key
         )
 
