@@ -29,6 +29,7 @@ def base64_to_hex(input_string):
 
     return binascii.hexlify(base64.b64decode(input_string)).decode()
 
+
 _STRUCTURE_PARAMETERS = {
     "fragments_key_prefix": "fragments/",
     "overlays_key_prefix": "overlays/",
