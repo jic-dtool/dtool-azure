@@ -69,6 +69,28 @@ Structural metadata describing the data items: manifest.json
 Per item descriptive metadata prefixed by: overlays/
 """
 
+def _get_blob_service(storage_account_name, config_path):
+    account_key = get_azure_account_key(
+        storage_account_name,
+        config_path=config_path
+    )
+    if account_key is None:
+        message = [
+            "Cannot find key for '{}' azure account".format(
+                storage_account_name
+            ),
+            "Hint: export DTOOL_AZURE_ACCOUNT_KEY_{}=azure_key".format(
+                storage_account_name
+            ),
+        ]
+
+        raise(KeyError(". ".join(message)))
+
+    return BlockBlobService(
+        account_name=storage_account_name,
+        account_key=account_key
+    )
+
 
 class AzureStorageBroker(object):
 
@@ -95,25 +117,9 @@ class AzureStorageBroker(object):
             default=os.path.expanduser("~/.cache/dtool/azure")
         )
 
-        account_key = get_azure_account_key(
+        self._blobservice = _get_blob_service(
             self.storage_account_name,
-            config_path=config_path
-        )
-        if account_key is None:
-            message = [
-                "Cannot find key for '{}' azure account".format(
-                    self.storage_account_name
-                ),
-                "Hint: export DTOOL_AZURE_ACCOUNT_KEY_{}=azure_key".format(
-                    self.storage_account_name
-                ),
-            ]
-
-            raise(KeyError(". ".join(message)))
-
-        self._blobservice = BlockBlobService(
-            account_name=self.storage_account_name,
-            account_key=account_key
+            config_path
         )
 
         self._set_prefixes()
