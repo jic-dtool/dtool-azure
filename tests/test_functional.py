@@ -12,7 +12,6 @@ from . import TEST_SAMPLE_DATA
 from . import CONFIG_PATH
 
 
-
 def _prefix_contains_something(storage_broker, prefix):
 
     uuid = storage_broker.uuid

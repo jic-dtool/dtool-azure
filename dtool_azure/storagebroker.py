@@ -23,6 +23,7 @@ from dtoolcore.filehasher import FileHasher, md5sum_hexdigest
 
 from dtool_azure.utils import get_azure_account_key
 
+
 def base64_to_hex(input_string):
     """Retun the hex encoded version of the base64 encoded input string."""
 
@@ -51,9 +52,9 @@ dataset.
 
 Dataset descriptive metadata: README.yml
 
-Dataset items. The keys for these blobs are item identifiers. An item identifier
-is the sha1sum hexdigest of the relative path used to represent the file on
-traditional file system disk.
+Dataset items. The keys for these blobs are item identifiers. An item
+identifier is the sha1sum hexdigest of the relative path used to represent the
+file on traditional file system disk.
 
 Administrative metadata describing the dataset is encoded as metadata on the
 container.
@@ -149,12 +150,12 @@ class AzureStorageBroker(object):
     def list_dataset_uris(cls, base_uri, config_path):
         """Return list containing URIs with base URI."""
 
-        account_name=get_config_value(
+        account_name = get_config_value(
             "DTOOL_AZURE_ACCOUNT_NAME",
             config_path=os.path.expanduser("~/.config/dtoolazure/config.json")
         )
 
-        account_key=get_config_value(
+        account_key = get_config_value(
             "DTOOL_AZURE_ACCOUNT_KEY",
             config_path=os.path.expanduser("~/.config/dtoolazure/config.json")
         )
@@ -217,7 +218,6 @@ class AzureStorageBroker(object):
         return self._blobservice.get_container_metadata(
             self.uuid
         )
-
 
     def get_readme_content(self):
 
@@ -321,7 +321,6 @@ class AzureStorageBroker(object):
 
         identifier = generate_identifier(handle)
 
-
         metadata_blob_suffix = "{}.{}.json".format(identifier, key)
         metadata_blob_name = self.fragments_key_prefix + metadata_blob_suffix
 
@@ -361,7 +360,6 @@ class AzureStorageBroker(object):
             contents
         )
 
-
     def get_item_abspath(self, identifier):
         """Return absolute path at which item content can be accessed.
 
@@ -396,7 +394,6 @@ class AzureStorageBroker(object):
 
         return local_item_abspath
         # original_path = self.item_properties(identifier)['path']
-
 
     def put_manifest(self, manifest):
         """Store the manifest by writing it to Azure.

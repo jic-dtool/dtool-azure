@@ -1,7 +1,5 @@
 """Dtool Azure helper functions."""
 
-import os
-
 from dtoolcore.utils import get_config_value
 
 

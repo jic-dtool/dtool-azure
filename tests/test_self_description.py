@@ -31,7 +31,7 @@ def test_writing_of_dtool_structure_file(tmp_uuid_and_uri):  # NOQA
         expected_azure_key
     )
 
-    from dtool_azure.storagebroker import _STRUCTURE_PARAMETERS as expected_content
+    from dtool_azure.storagebroker import _STRUCTURE_PARAMETERS as expected_content  # NOQA
 
     actual_content = _get_data_structure_from_key(
         proto_dataset._storage_broker,
