@@ -156,21 +156,8 @@ class AzureStorageBroker(object):
     def list_dataset_uris(cls, base_uri, config_path):
         """Return list containing URIs with base URI."""
 
-        account_name = get_config_value(
-            "DTOOL_AZURE_ACCOUNT_NAME",
-            config_path=os.path.expanduser("~/.config/dtoolazure/config.json")
-        )
-
-        account_key = get_config_value(
-            "DTOOL_AZURE_ACCOUNT_KEY",
-            config_path=os.path.expanduser("~/.config/dtoolazure/config.json")
-        )
-
-        blobservice = BlockBlobService(
-            account_name=account_name,
-            account_key=account_key
-        )
-
+        storage_account_name = generous_parse_uri(base_uri).netloc
+        blobservice = _get_blob_service(storage_account_name, config_path)
         containers = blobservice.list_containers(include_metadata=True)
 
         uri_list = []
