@@ -9,6 +9,8 @@ from dtoolcore.filehasher import md5sum_hexdigest
 
 from . import tmp_uuid_and_uri  # NOQA
 from . import TEST_SAMPLE_DATA
+from . import CONFIG_PATH
+
 
 
 def _prefix_contains_something(storage_broker, prefix):
@@ -43,13 +45,13 @@ def test_basic_workflow(tmp_uuid_and_uri):  # NOQA
     proto_dataset = ProtoDataSet(
         uri=dest_uri,
         admin_metadata=admin_metadata,
-        config_path=None)
+        config_path=CONFIG_PATH)
     proto_dataset.create()
     proto_dataset.put_item(local_file_path, 'tiny.png')
     proto_dataset.freeze()
 
     # Read in a dataset
-    dataset = DataSet.from_uri(dest_uri)
+    dataset = DataSet.from_uri(dest_uri, config_path=CONFIG_PATH)
 
     expected_identifier = generate_identifier('tiny.png')
     assert expected_identifier in dataset.identifiers
@@ -77,7 +79,7 @@ def test_proto_dataset_freeze_functional(tmp_uuid_and_uri):  # NOQA
     proto_dataset = ProtoDataSet(
         uri=dest_uri,
         admin_metadata=admin_metadata,
-        config_path=None
+        config_path=CONFIG_PATH
     )
     proto_dataset.create()
 
@@ -106,7 +108,7 @@ def test_proto_dataset_freeze_functional(tmp_uuid_and_uri):  # NOQA
 
     # We shouldn't be able to load this as a DataSet
     with pytest.raises(DtoolCoreTypeError):
-        DataSet.from_uri(dest_uri)
+        DataSet.from_uri(dest_uri, config_path=CONFIG_PATH)
 
     proto_dataset.freeze()
 
@@ -118,10 +120,10 @@ def test_proto_dataset_freeze_functional(tmp_uuid_and_uri):  # NOQA
 
     # Now we shouln't be able to load as a ProtoDataSet
     with pytest.raises(DtoolCoreTypeError):
-        ProtoDataSet.from_uri(dest_uri)
+        ProtoDataSet.from_uri(dest_uri, config_path=CONFIG_PATH)
 
     # But we can as a DataSet
-    dataset = DataSet.from_uri(dest_uri)
+    dataset = DataSet.from_uri(dest_uri, config_path=CONFIG_PATH)
     assert dataset.name == 'func_test_dataset_freeze'
 
     # Test identifiers
@@ -171,14 +173,14 @@ def test_creation_and_reading(tmp_uuid_and_uri):  # NOQA
     proto_dataset = ProtoDataSet(
         uri=dest_uri,
         admin_metadata=admin_metadata,
-        config_path=None)
+        config_path=CONFIG_PATH)
     proto_dataset.create()
     proto_dataset.put_readme("")
 
     assert proto_dataset.name == "func_test_dataset"
 
     # Test reading from URI.
-    proto_dataset = ProtoDataSet.from_uri(dest_uri)
+    proto_dataset = ProtoDataSet.from_uri(dest_uri, config_path=CONFIG_PATH)
     assert proto_dataset.name == "func_test_dataset"
 
     # Test get/put readme.
@@ -265,13 +267,13 @@ def test_files_with_whitespace(tmp_uuid_and_uri):  # NOQA
     proto_dataset = ProtoDataSet(
         uri=dest_uri,
         admin_metadata=admin_metadata,
-        config_path=None)
+        config_path=CONFIG_PATH)
     proto_dataset.create()
     proto_dataset.put_item(local_file_path, 'tiny with space.png')
     proto_dataset.freeze()
 
     # Read in a dataset
-    dataset = DataSet.from_uri(dest_uri)
+    dataset = DataSet.from_uri(dest_uri, config_path=CONFIG_PATH)
 
     expected_identifier = generate_identifier('tiny with space.png')
     assert expected_identifier in dataset.identifiers

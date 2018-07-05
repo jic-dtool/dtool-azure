@@ -4,7 +4,8 @@ from . import tmp_uuid_and_uri  # NOQA
 from . import (
     _key_exists_in_storage_broker,
     _get_data_structure_from_key,
-    _get_unicode_from_key
+    _get_unicode_from_key,
+    CONFIG_PATH,
 )
 
 
@@ -19,7 +20,7 @@ def test_writing_of_dtool_structure_file(tmp_uuid_and_uri):  # NOQA
     proto_dataset = ProtoDataSet(
         uri=dest_uri,
         admin_metadata=admin_metadata,
-        config_path=None
+        config_path=CONFIG_PATH
     )
     proto_dataset.create()
 
@@ -50,7 +51,7 @@ def test_writing_of_dtool_readme_file(tmp_uuid_and_uri):  # NOQA
     proto_dataset = ProtoDataSet(
         uri=dest_uri,
         admin_metadata=admin_metadata,
-        config_path=None
+        config_path=CONFIG_PATH
     )
     proto_dataset.create()
 

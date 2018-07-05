@@ -1,10 +1,13 @@
 from dtoolcore import  DataSet
 
+from . import CONFIG_PATH
+
+
 def test_http_manifest():
 
     uri = "azure://jicinformatics/04c4e3a4-f072-4fc1-881a-602d589b089a"
 
-    dataset = DataSet.from_uri(uri)
+    dataset = DataSet.from_uri(uri, CONFIG_PATH)
 
     http_manifest = dataset._storage_broker.generate_http_manifest()
 
@@ -26,7 +29,7 @@ def test_http_enable():
 
     uri = "azure://jicinformatics/8e65e5ee-a5c7-4a0e-bc2d-a47f8c3a6809"
 
-    dataset = DataSet.from_uri(uri)
+    dataset = DataSet.from_uri(uri, CONFIG_PATH)
 
     access_url = dataset._storage_broker.http_enable()
 

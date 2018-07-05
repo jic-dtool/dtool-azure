@@ -15,6 +15,8 @@ from dtool_azure.storagebroker import (
 _HERE = os.path.dirname(__file__)
 TEST_SAMPLE_DATA = os.path.join(_HERE, "data")
 
+CONFIG_PATH = os.path.expanduser("~/.config/dtool/dtool.json")
+
 
 def _key_exists_in_storage_broker(storage_broker, key):
 
@@ -43,7 +45,7 @@ def _get_unicode_from_key(storage_broker, key):
 
 def _remove_dataset(uri):
 
-    storage_broker = AzureStorageBroker(uri)
+    storage_broker = AzureStorageBroker(uri, config_path=CONFIG_PATH)
 
     storage_broker._blobservice.delete_container(storage_broker.uuid)
 
@@ -56,7 +58,7 @@ def tmp_uuid_and_uri(request):
     uri = AzureStorageBroker.generate_uri(
         "test_dataset",
         uuid,
-        "azure://test-dtool-azure-collection"
+        "azure://jicinformatics"
     )
 
     @request.addfinalizer
