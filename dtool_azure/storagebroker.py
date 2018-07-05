@@ -69,6 +69,7 @@ Structural metadata describing the data items: manifest.json
 Per item descriptive metadata prefixed by: overlays/
 """
 
+
 def _get_blob_service(storage_account_name, config_path):
     account_key = get_azure_account_key(
         storage_account_name,
