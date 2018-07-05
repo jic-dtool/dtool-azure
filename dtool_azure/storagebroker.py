@@ -98,6 +98,17 @@ class AzureStorageBroker(object):
             self.storage_account_name,
             config_path=config_path
         )
+        if account_key is None:
+            message = [
+                "Cannot find key for '{}' azure account".format(
+                    self.storage_account_name
+                ),
+                "Hint: export DTOOL_AZURE_ACCOUNT_KEY_{}=azure_key".format(
+                    self.storage_account_name
+                ),
+            ]
+
+            raise(KeyError(". ".join(message)))
 
         self._blobservice = BlockBlobService(
             account_name=self.storage_account_name,
