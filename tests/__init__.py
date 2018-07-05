@@ -1,6 +1,8 @@
 
 import os
 import json
+import tempfile
+import shutil
 
 import pytest
 
@@ -28,6 +30,7 @@ def _get_data_structure_from_key(storage_broker, key):
 
     return json.loads(text_blob.content)
 
+
 def _get_unicode_from_key(storage_broker, key):
 
     text_blob = storage_broker._blobservice.get_blob_to_text(
@@ -36,6 +39,7 @@ def _get_unicode_from_key(storage_broker, key):
     )
 
     return text_blob.content
+
 
 def _remove_dataset(uri):
 
@@ -60,3 +64,13 @@ def tmp_uuid_and_uri(request):
         _remove_dataset(uri)
 
     return (uuid, uri)
+
+
+@pytest.fixture
+def tmp_dir_fixture(request):
+    d = tempfile.mkdtemp()
+
+    @request.addfinalizer
+    def teardown():
+        shutil.rmtree(d)
+    return d
