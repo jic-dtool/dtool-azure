@@ -3,6 +3,7 @@ import os
 import json
 import tempfile
 import shutil
+from contextlib import contextmanager
 
 import pytest
 
@@ -16,6 +17,20 @@ _HERE = os.path.dirname(__file__)
 TEST_SAMPLE_DATA = os.path.join(_HERE, "data")
 
 CONFIG_PATH = os.path.expanduser("~/.config/dtool/dtool.json")
+
+
+@contextmanager
+def tmp_env_var(key, value):
+    os.environ[key] = value
+    yield
+    del os.environ[key]
+
+
+@contextmanager
+def tmp_directory():
+    d = tempfile.mkdtemp()
+    yield d
+    shutil.rmtree(d)
 
 
 def _key_exists_in_storage_broker(storage_broker, key):

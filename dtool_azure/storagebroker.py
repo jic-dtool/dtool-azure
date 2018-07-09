@@ -381,11 +381,13 @@ class AzureStorageBroker(object):
         )
         if not os.path.isfile(local_item_abspath):
 
+            tmp_local_item_abspath = local_item_abspath + ".tmp"
             self._blobservice.get_blob_to_path(
                 self.uuid,
                 identifier,
-                local_item_abspath
+                tmp_local_item_abspath
             )
+            os.rename(tmp_local_item_abspath, local_item_abspath)
 
         return local_item_abspath
         # original_path = self.item_properties(identifier)['path']
