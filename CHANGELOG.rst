@@ -26,11 +26,18 @@ Removed
 Fixed
 ^^^^^
 
-- Made download to DTOOL_AZURE_CACHE_DIRECTORY more robust
-
 
 Security
 ^^^^^^^^
+
+
+[0.2.1] - 2018-07-05
+--------------------
+
+Fixed
+^^^^^
+
+- Made download to DTOOL_AZURE_CACHE_DIRECTORY more robust
 
 
 [0.2.0] - 2018-07-05
