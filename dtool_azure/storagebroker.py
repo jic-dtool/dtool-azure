@@ -11,6 +11,8 @@ except ImportError:
 from azure.storage.blob import BlockBlobService, PublicAccess
 from azure.common import AzureMissingResourceHttpError, AzureHttpError
 
+from dtoolcore.storagebroker import BaseStorageBroker
+
 from dtoolcore.utils import (
     generate_identifier,
     get_config_value,
@@ -94,7 +96,7 @@ def _get_blob_service(storage_account_name, config_path):
     )
 
 
-class AzureStorageBroker(object):
+class AzureStorageBroker(BaseStorageBroker):
 
     #: Attribute used to define the type of storage broker.
     key = "azure"
@@ -126,6 +128,8 @@ class AzureStorageBroker(object):
 
         self._set_prefixes()
 
+    # Generic helper functions.
+
     def _set_prefixes(self):
 
         def generate_key(structure_dict_key):
@@ -142,6 +146,8 @@ class AzureStorageBroker(object):
         self.admin_metadata_key = generate_key("admin_metadata_key")
 
         self.http_manifest_key = generate_key("http_manifest_key")
+
+    # Class methods to override.
 
     @classmethod
     def generate_uri(cls, name, uuid, base_uri):
@@ -173,6 +179,8 @@ class AzureStorageBroker(object):
             uri_list.append(uri)
 
         return uri_list
+
+    # Methods to override.
 
     def create_structure(self):
 
