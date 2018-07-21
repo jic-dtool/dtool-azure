@@ -194,6 +194,9 @@ class AzureStorageBroker(BaseStorageBroker):
     def get_readme_key(self):
         return self.dataset_readme_key
 
+    def get_manifest_key(self):
+        return "manifest.json"
+
     def _create_structure(self):
 
         result = self._blobservice.create_container(self.uuid)
@@ -235,12 +238,6 @@ class AzureStorageBroker(BaseStorageBroker):
             return True
         except (AzureMissingResourceHttpError, AzureHttpError):
             return False
-
-    def get_manifest(self):
-
-        manifest_as_text = self.get_text('manifest.json')
-
-        return json.loads(manifest_as_text)
 
     def get_overlay(self, overlay_name):
         """Return overlay as a dictionary.
@@ -393,16 +390,6 @@ class AzureStorageBroker(BaseStorageBroker):
 
         return local_item_abspath
         # original_path = self.item_properties(identifier)['path']
-
-    def put_manifest(self, manifest):
-        """Store the manifest by writing it to Azure.
-
-        It is the client's responsibility to ensure that the manifest provided
-        is a dictionary with valid contents.
-
-        :param manifest: dictionary with manifest structural metadata
-        """
-        self.put_text('manifest.json', json.dumps(manifest))
 
     def iter_item_handles(self):
         """Return iterator over item handles."""
