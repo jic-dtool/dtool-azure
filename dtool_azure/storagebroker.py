@@ -197,6 +197,10 @@ class AzureStorageBroker(BaseStorageBroker):
     def get_manifest_key(self):
         return "manifest.json"
 
+    def get_overlay_key(self, overlay_name):
+        return self.overlays_key_prefix + overlay_name + '.json'
+
+
     def _create_structure(self):
 
         result = self._blobservice.create_container(self.uuid)
@@ -239,19 +243,6 @@ class AzureStorageBroker(BaseStorageBroker):
         except (AzureMissingResourceHttpError, AzureHttpError):
             return False
 
-    def get_overlay(self, overlay_name):
-        """Return overlay as a dictionary.
-
-        :param overlay_name: name of the overlay
-        :returns: overlay as a dictionary
-        """
-
-        overlay_fpath = self.overlays_key_prefix + overlay_name + '.json'
-
-        overlay_as_string = self.get_text(overlay_fpath)
-
-        return json.loads(overlay_as_string)
-
     def list_overlay_names(self):
         """Return list of overlay names."""
 
@@ -265,21 +256,6 @@ class AzureStorageBroker(BaseStorageBroker):
             overlay_names.append(overlay_name)
 
         return overlay_names
-
-    def put_overlay(self, overlay_name, overlay):
-        """Store the overlay by writing it to Azure.
-
-        It is the client's responsibility to ensure that the overlay provided
-        is a dictionary with valid contents.
-
-        :param overlay_name: name of the overlay
-        :overlay: overlay dictionary
-        """
-        blob_fpath = os.path.join(
-            self.overlays_key_prefix,
-            overlay_name + '.json'
-        )
-        self.put_text(blob_fpath, json.dumps(overlay))
 
     # Protodataset methods
 
