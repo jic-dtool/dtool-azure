@@ -191,6 +191,9 @@ class AzureStorageBroker(BaseStorageBroker):
     def get_dtool_readme_key(self):
         return self.dtool_readme_key
 
+    def get_readme_key(self):
+        return self.dataset_readme_key
+
     def _create_structure(self):
 
         result = self._blobservice.create_container(self.uuid)
@@ -220,10 +223,6 @@ class AzureStorageBroker(BaseStorageBroker):
         return self._blobservice.get_container_metadata(
             self.uuid
         )
-
-    def get_readme_content(self):
-
-        return self.get_text(self.dataset_readme_key)
 
     def has_admin_metadata(self):
         """Return True if the administrative metadata exists.
@@ -286,10 +285,6 @@ class AzureStorageBroker(BaseStorageBroker):
         self.put_text(blob_fpath, json.dumps(overlay))
 
     # Protodataset methods
-
-    def put_readme(self, content):
-
-        self.put_text(self.dataset_readme_key, content)
 
     def put_item(self, fpath, relpath):
 
