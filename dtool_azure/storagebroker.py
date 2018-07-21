@@ -379,31 +379,36 @@ class AzureStorageBroker(BaseStorageBroker):
                     handle = blob.metadata['relpath']
                     yield handle
 
-    def item_properties(self, handle):
-        """Return properties of the item with the given handle."""
-
+    def _get_blob_properties(self, handle):
         identifier = generate_identifier(handle)
-        blob = self._blobservice.get_blob_properties(
+        return self._blobservice.get_blob_properties(
             self.uuid,
             identifier
         )
 
+    def get_size_in_bytes(self, handle):
+        blob = self._get_blob_properties(handle)
+        return blob.properties.content_length
+
+    def get_utc_timestamp(self, handle):
+        blob = self._get_blob_properties(handle)
+        aware_datetime = blob.properties.last_modified
+        naive_datetime = aware_datetime.replace(tzinfo=None)
+        return timestamp(naive_datetime)
+
+    def get_hash(self, handle):
+        blob = self._get_blob_properties(handle)
         md5_base64 = blob.properties.content_settings.content_md5
         if md5_base64 is None:
             md5_hexdigest = None
         else:
             md5_hexdigest = base64_to_hex(md5_base64)
+        return md5_hexdigest
 
-        aware_datetime = blob.properties.last_modified
-        naive_datetime = aware_datetime.replace(tzinfo=None)
-        properties = {
-            'relpath': blob.metadata['relpath'],
-            'size_in_bytes': blob.properties.content_length,
-            'utc_timestamp': timestamp(naive_datetime),
-            'hash': md5_hexdigest
-        }
-
-        return properties
+# According to the tests the below is not needed.
+#   def get_relpath(self, handle):
+#       blob = self._get_blob_properties(handle)
+#       return blob.metadata['relpath']
 
     def pre_freeze_hook(self):
         pass
