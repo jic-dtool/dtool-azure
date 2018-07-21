@@ -105,6 +105,9 @@ class AzureStorageBroker(BaseStorageBroker):
     #: function name to the manifest.
     hasher = FileHasher(md5sum_hexdigest)
 
+    _structure_parameters = _STRUCTURE_PARAMETERS
+    _dtool_readme_txt = _DTOOL_README_TXT
+
     def __init__(self, uri, config_path=None):
 
         parse_result = generous_parse_uri(uri)
@@ -182,7 +185,13 @@ class AzureStorageBroker(BaseStorageBroker):
 
     # Methods to override.
 
-    def create_structure(self):
+    def get_structure_key(self):
+        return self.structure_dict_key
+
+    def get_dtool_readme_key(self):
+        return self.dtool_readme_key
+
+    def _create_structure(self):
 
         result = self._blobservice.create_container(self.uuid)
 
@@ -190,16 +199,6 @@ class AzureStorageBroker(BaseStorageBroker):
             raise Exception(
                 "Container for {} already exists.".format(self.uuid)
             )
-
-        self.store_text(
-            self.structure_dict_key,
-            json.dumps(_STRUCTURE_PARAMETERS)
-        )
-
-        self.store_text(
-            self.dtool_readme_key,
-            _DTOOL_README_TXT
-        )
 
     def put_admin_metadata(self, admin_metadata):
 
@@ -211,7 +210,7 @@ class AzureStorageBroker(BaseStorageBroker):
             admin_metadata
         )
 
-        self.store_text(
+        self.put_text(
             self.admin_metadata_key,
             json.dumps(admin_metadata)
         )
@@ -284,13 +283,13 @@ class AzureStorageBroker(BaseStorageBroker):
             self.overlays_key_prefix,
             overlay_name + '.json'
         )
-        self.store_text(blob_fpath, json.dumps(overlay))
+        self.put_text(blob_fpath, json.dumps(overlay))
 
     # Protodataset methods
 
     def put_readme(self, content):
 
-        self.store_text(self.dataset_readme_key, content)
+        self.put_text(self.dataset_readme_key, content)
 
     def put_item(self, fpath, relpath):
 
@@ -353,7 +352,7 @@ class AzureStorageBroker(BaseStorageBroker):
 
         return text_blob.content
 
-    def store_text(self, name, contents):
+    def put_text(self, name, contents):
         """Store the given text contents so that they are later retrievable by
         the given name."""
 
@@ -408,7 +407,7 @@ class AzureStorageBroker(BaseStorageBroker):
 
         :param manifest: dictionary with manifest structural metadata
         """
-        self.store_text('manifest.json', json.dumps(manifest))
+        self.put_text('manifest.json', json.dumps(manifest))
 
     def iter_item_handles(self):
         """Return iterator over item handles."""
@@ -556,7 +555,7 @@ class AzureStorageBroker(BaseStorageBroker):
 
     def write_http_manifest(self, http_manifest):
 
-        self.store_text(
+        self.put_text(
             self.http_manifest_key,
             json.dumps(http_manifest)
         )
