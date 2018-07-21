@@ -191,6 +191,9 @@ class AzureStorageBroker(BaseStorageBroker):
     def get_dtool_readme_key(self):
         return self.dtool_readme_key
 
+    def get_admin_metadata_key(self):
+        return self.admin_metadata_key
+
     def get_readme_key(self):
         return self.dataset_readme_key
 
@@ -199,7 +202,6 @@ class AzureStorageBroker(BaseStorageBroker):
 
     def get_overlay_key(self, overlay_name):
         return self.overlays_key_prefix + overlay_name + '.json'
-
 
     def _create_structure(self):
 
@@ -211,6 +213,7 @@ class AzureStorageBroker(BaseStorageBroker):
             )
 
     def put_admin_metadata(self, admin_metadata):
+        super(AzureStorageBroker, self).put_admin_metadata(admin_metadata)
 
         for k, v in admin_metadata.items():
             admin_metadata[k] = str(v)
@@ -218,11 +221,6 @@ class AzureStorageBroker(BaseStorageBroker):
         self._blobservice.set_container_metadata(
             self.uuid,
             admin_metadata
-        )
-
-        self.put_text(
-            self.admin_metadata_key,
-            json.dumps(admin_metadata)
         )
 
     def get_admin_metadata(self):
