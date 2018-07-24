@@ -15,7 +15,7 @@ setup(
     author_email="Matthew.Hartley@jic.ac.uk",
     url=url,
     install_requires=[
-        "dtoolcore>=3.0",
+        "dtoolcore>=3.4",
         "azure-storage"
     ],
     entry_points={
