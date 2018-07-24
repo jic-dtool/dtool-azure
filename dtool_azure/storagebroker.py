@@ -522,3 +522,14 @@ class AzureStorageBroker(BaseStorageBroker):
             self.http_manifest_key,
             json.dumps(http_manifest)
         )
+
+    def _list_historical_readme_keys(self):
+        prefix = self.dataset_readme_key + "-"
+        historical_readme_keys = []
+        for blob in self._blobservice.list_blobs(
+            self.uuid,
+            prefix=prefix
+        ):
+            key = blob.name
+            historical_readme_keys.append(key)
+        return historical_readme_keys
