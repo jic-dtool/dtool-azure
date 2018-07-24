@@ -23,6 +23,7 @@ from dtoolcore.utils import (
 
 from dtoolcore.filehasher import FileHasher, md5sum_hexdigest
 
+from dtool_azure import __version__
 from dtool_azure.utils import get_azure_account_key
 
 
@@ -40,7 +41,8 @@ _STRUCTURE_PARAMETERS = {
     "structure_dict_key": "structure.json",
     "dtool_readme_key": "README.txt",
     "admin_metadata_key": "dtool",
-    "http_manifest_key": "http_manifest.json"
+    "http_manifest_key": "http_manifest.json",
+    "storage_broker_version": __version__,
 }
 
 _DTOOL_README_TXT = """README
