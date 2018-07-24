@@ -1,7 +1,5 @@
 import os
 import json
-import base64
-import binascii
 
 try:
     from urlparse import urlunparse
@@ -24,13 +22,7 @@ from dtoolcore.utils import (
 from dtoolcore.filehasher import FileHasher, md5sum_hexdigest
 
 from dtool_azure import __version__
-from dtool_azure.utils import get_azure_account_key
-
-
-def base64_to_hex(input_string):
-    """Retun the hex encoded version of the base64 encoded input string."""
-
-    return binascii.hexlify(base64.b64decode(input_string)).decode()
+from dtool_azure.utils import get_azure_account_key, base64_to_hex
 
 
 _STRUCTURE_PARAMETERS = {
