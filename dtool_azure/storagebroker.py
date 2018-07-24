@@ -6,7 +6,7 @@ try:
 except ImportError:
     from urllib.parse import urlunparse
 
-from azure.storage.blob import BlockBlobService, PublicAccess
+from azure.storage.blob import PublicAccess
 from azure.common import AzureMissingResourceHttpError, AzureHttpError
 
 from dtoolcore.storagebroker import BaseStorageBroker
@@ -22,7 +22,7 @@ from dtoolcore.utils import (
 from dtoolcore.filehasher import FileHasher, md5sum_hexdigest
 
 from dtool_azure import __version__
-from dtool_azure.utils import get_azure_account_key, base64_to_hex
+from dtool_azure.utils import base64_to_hex, get_blob_service
 
 
 _STRUCTURE_PARAMETERS = {
@@ -67,29 +67,6 @@ Per item descriptive metadata prefixed by: overlays/
 """
 
 
-def _get_blob_service(storage_account_name, config_path):
-    account_key = get_azure_account_key(
-        storage_account_name,
-        config_path=config_path
-    )
-    if account_key is None:
-        message = [
-            "Cannot find key for '{}' azure account".format(
-                storage_account_name
-            ),
-            "Hint: export DTOOL_AZURE_ACCOUNT_KEY_{}=azure_key".format(
-                storage_account_name
-            ),
-        ]
-
-        raise(KeyError(". ".join(message)))
-
-    return BlockBlobService(
-        account_name=storage_account_name,
-        account_key=account_key
-    )
-
-
 class AzureStorageBroker(BaseStorageBroker):
 
     #: Attribute used to define the type of storage broker.
@@ -118,7 +95,7 @@ class AzureStorageBroker(BaseStorageBroker):
             default=os.path.expanduser("~/.cache/dtool/azure")
         )
 
-        self._blobservice = _get_blob_service(
+        self._blobservice = get_blob_service(
             self.storage_account_name,
             config_path
         )
@@ -162,7 +139,7 @@ class AzureStorageBroker(BaseStorageBroker):
         """Return list containing URIs with base URI."""
 
         storage_account_name = generous_parse_uri(base_uri).netloc
-        blobservice = _get_blob_service(storage_account_name, config_path)
+        blobservice = get_blob_service(storage_account_name, config_path)
         containers = blobservice.list_containers(include_metadata=True)
 
         uri_list = []
