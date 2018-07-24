@@ -103,23 +103,23 @@ class AzureStorageBroker(BaseStorageBroker):
         self._set_prefixes()
 
     # Generic helper functions.
+    def _generate_key(self, structure_dict_key):
+        return self._structure_parameters[structure_dict_key]
 
     def _set_prefixes(self):
 
-        def generate_key(structure_dict_key):
-            return _STRUCTURE_PARAMETERS[structure_dict_key]
 
-        self.fragments_key_prefix = generate_key('fragments_key_prefix')
-        self.overlays_key_prefix = generate_key('overlays_key_prefix')
+        self.fragments_key_prefix = self._generate_key('fragments_key_prefix')
+        self.overlays_key_prefix = self._generate_key('overlays_key_prefix')
 
-        self.dtool_readme_key = generate_key("dtool_readme_key")
-        self.dataset_readme_key = generate_key("dataset_readme_key")
-        self.manifest_key = generate_key("manifest_key")
-        self.structure_dict_key = generate_key("structure_dict_key")
+        self.dtool_readme_key = self._generate_key("dtool_readme_key")
+        self.dataset_readme_key = self._generate_key("dataset_readme_key")
+        self.manifest_key = self._generate_key("manifest_key")
+        self.structure_dict_key = self._generate_key("structure_dict_key")
 
-        self.admin_metadata_key = generate_key("admin_metadata_key")
+        self.admin_metadata_key = self._generate_key("admin_metadata_key")
 
-        self.http_manifest_key = generate_key("http_manifest_key")
+        self.http_manifest_key = self._generate_key("http_manifest_key")
 
     # Class methods to override.
 
