@@ -1,12 +1,14 @@
 import os
 import json
 
+from base64 import b64encode
+
 try:
     from urlparse import urlunparse
 except ImportError:
     from urllib.parse import urlunparse
 
-from azure.storage.blob import PublicAccess
+from azure.storage.blob import PublicAccess, ContentSettings
 from azure.common import AzureMissingResourceHttpError, AzureHttpError
 
 from dtoolcore.storagebroker import BaseStorageBroker
@@ -19,7 +21,7 @@ from dtoolcore.utils import (
     timestamp
 )
 
-from dtoolcore.filehasher import FileHasher, md5sum_hexdigest
+from dtoolcore.filehasher import FileHasher, md5sum_hexdigest, md5sum_digest
 
 from dtool_azure import __version__
 from dtool_azure.utils import base64_to_hex, get_blob_service
@@ -65,6 +67,11 @@ Structural metadata describing the dataset: structure.json
 Structural metadata describing the data items: manifest.json
 Per item descriptive metadata prefixed by: overlays/
 """
+
+
+def _get_md5sum(fpath):
+    _hasher = FileHasher(md5sum_digest)
+    return b64encode(_hasher(fpath)).decode("utf-8")
 
 
 class AzureStorageBroker(BaseStorageBroker):
@@ -274,7 +281,8 @@ class AzureStorageBroker(BaseStorageBroker):
         self._blobservice.create_blob_from_path(
             self.uuid,
             identifier,
-            fpath
+            fpath,
+            content_settings=ContentSettings(content_md5=_get_md5sum(fpath))
         )
 
         self._blobservice.set_blob_metadata(

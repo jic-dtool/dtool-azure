@@ -26,6 +26,8 @@ Removed
 Fixed
 ^^^^^
 
+- Generation of md5 checksums for large files, previously set to "None"
+
 
 Security
 ^^^^^^^^
