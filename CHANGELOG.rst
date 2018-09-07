@@ -26,11 +26,18 @@ Removed
 Fixed
 ^^^^^
 
-- Generation of md5 checksums for large files, previously set to "None"
-
-
 Security
 ^^^^^^^^
+
+
+[0.3.1] - 2018-09-07
+--------------------
+
+Fixed
+^^^^^
+
+- Generation of md5 checksums for large files, previously set to "None"
+
 
 [0.3.0] - 2018-07-24
 --------------------
