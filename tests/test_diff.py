@@ -7,6 +7,7 @@ from . import tmp_directory
 
 from . import TEST_SAMPLE_DATA
 
+
 def test_copy_and_diff(tmp_uuid_and_uri):  # NOQA
 
     uuid, dest_uri = tmp_uuid_and_uri
