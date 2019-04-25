@@ -18,7 +18,8 @@ from dtoolcore.utils import (
     get_config_value,
     mkdir_parents,
     generous_parse_uri,
-    timestamp
+    timestamp,
+    DEFAULT_CACHE_PATH,
 )
 
 from dtoolcore.filehasher import FileHasher, md5sum_hexdigest, md5sum_digest
@@ -102,9 +103,9 @@ class AzureStorageBroker(BaseStorageBroker):
         self.http_manifest_key = self._generate_key("http_manifest_key")
 
         self._azure_cache_abspath = get_config_value(
-            "DTOOL_AZURE_CACHE_DIRECTORY",
+            "DTOOL_CACHE_DIRECTORY",
             config_path=config_path,
-            default=os.path.expanduser("~/.cache/dtool/azure")
+            default=DEFAULT_CACHE_PATH
         )
 
         self._blobservice = get_blob_service(

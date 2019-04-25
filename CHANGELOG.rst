@@ -14,6 +14,9 @@ Added
 Changed
 ^^^^^^^
 
+- Cache environment variable changed from DTOOL_AZURE_CACHE_DIRECTORY to DTOOL_CACHE_DIRECTORY
+- Default cache directory changed from ``~/.cache/dtool/azure`` to ``~/.cache/dtool``
+
 
 Deprecated
 ^^^^^^^^^^
