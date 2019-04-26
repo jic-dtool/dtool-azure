@@ -73,31 +73,6 @@ To list all the datasets in an Azure storage account one can use the command bel
 See the `dtool documentation <http://dtool.readthedocs.io>`_ for more detail.
 
 
-Configuring the local dtool Azure cache
----------------------------------------
-
-When fetching items from a dataset, for example using the ``dtool item fetch``
-command, the content of the item is cached in a file on local disk. The default
-cache directory is ``~/.cache/dtool/azure``.
-
-One may want to change this directory. For example, if working on a HPC cluster
-to set it to a directory that lives on fast solid state disk. This can be achieved
-by setting the ``DTOOL_AZURE_CACHE_DIRECTORY`` environment variable. For example::
-
-    mkdir -p /tmp/dtool/azure
-    export DTOOL_AZURE_CACHE_DIRECTORY=/tmp/dtool/azure
-
-Alternatively, when using the ``dtool`` command line interface one can add the
-``DTOOL_AZURE_CACHE_DIRECTORY`` key to the ``~/.config/dtool/dtool.json`` file.
-For example::
-
-    {
-       "DTOOL_AZURE_CACHE_DIRECTORY": "/tmp/dtool/azure"
-    }
-
-If the file does not exist one may need to create it.
-
-
 Related packages
 ----------------
 
