@@ -30,6 +30,15 @@ Security
 ^^^^^^^^
 
 
+[0.5.0] - 2019-07-12
+--------------------
+
+Added
+^^^^^
+
+- Added optimisation to improve speed when copying data from Azure storage
+
+
 [0.4.0] - 2019-04-25
 --------------------
 
