@@ -72,12 +72,11 @@ To list all the datasets in an Azure storage account one can use the command bel
 
 See the `dtool documentation <http://dtool.readthedocs.io>`_ for more detail.
 
-
 Related packages
 ----------------
 
 - `dtoolcore <https://github.com/jic-dtool/dtoolcore>`_
-- `dtool-cli <https://github.com/jic-dtool/dtool-cli>`_
 - `dtool-http <https://github.com/jic-dtool/dtool-http>`_
 - `dtool-s3 <https://github.com/jic-dtool/dtool-s3>`_
 - `dtool-irods <https://github.com/jic-dtool/dtool-irods>`_
+- `dtool-ecs <https://github.com/jic-dtool/dtool-ecs>`_
