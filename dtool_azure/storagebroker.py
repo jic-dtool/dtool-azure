@@ -150,6 +150,14 @@ class AzureStorageBroker(BaseStorageBroker):
                 overlay_fpath
             )
 
+        annotations = {}
+        for ann_name in self.list_annotation_names():
+            ann_fpath = self.annotations_key_prefix + ann_name + '.json'
+            annotations[ann_name] = self._blobservice.make_blob_url(
+                self.uuid,
+                ann_fpath
+            )
+
         manifest = self.get_manifest()
         item_urls = {}
         for identifier in manifest["items"]:
@@ -162,6 +170,7 @@ class AzureStorageBroker(BaseStorageBroker):
             "admin_metadata": self.get_admin_metadata(),
             "item_urls": item_urls,
             "overlays": overlays,
+            "annotations": annotations,
             "readme_url": readme_url,
             "manifest_url": manifest_url
         }
