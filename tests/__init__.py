@@ -73,7 +73,7 @@ def tmp_uuid_and_uri(request):
     uri = AzureStorageBroker.generate_uri(
         "test_dataset",
         uuid,
-        "azure://jicinformatics"
+        "azure://dtooltesting"
     )
 
     @request.addfinalizer

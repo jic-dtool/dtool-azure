@@ -31,6 +31,7 @@ from dtool_azure.utils import base64_to_hex, get_blob_service
 _STRUCTURE_PARAMETERS = {
     "fragments_key_prefix": "fragments/",
     "overlays_key_prefix": "overlays/",
+    "annotations_key_prefix": "annotations/",
     "dataset_readme_key": "README.yml",
     "manifest_key": "manifest.json",
     "structure_dict_key": "structure.json",
@@ -67,6 +68,7 @@ This file: README.txt
 Structural metadata describing the dataset: structure.json
 Structural metadata describing the data items: manifest.json
 Per item descriptive metadata prefixed by: overlays/
+Dataset key/value pairs metadata prefixed by: $UUID/annotations/
 """
 
 
@@ -99,6 +101,9 @@ class AzureStorageBroker(BaseStorageBroker):
 
         self.fragments_key_prefix = self._generate_key('fragments_key_prefix')
         self.overlays_key_prefix = self._generate_key('overlays_key_prefix')
+        self.annotations_key_prefix = self._generate_key(
+            'annotations_key_prefix'
+        )
 
         self.http_manifest_key = self._generate_key("http_manifest_key")
 
@@ -223,6 +228,9 @@ class AzureStorageBroker(BaseStorageBroker):
     def get_overlay_key(self, overlay_name):
         return self.overlays_key_prefix + overlay_name + '.json'
 
+    def get_annotation_key(self, annotation_name):
+        return self.annotations_key_prefix + annotation_name + '.json'
+
     def _create_structure(self):
 
         result = self._blobservice.create_container(self.uuid)
@@ -274,6 +282,20 @@ class AzureStorageBroker(BaseStorageBroker):
             overlay_names.append(overlay_name)
 
         return overlay_names
+
+    def list_annotation_names(self):
+        """Return list of annotation names."""
+
+        annotation_names = []
+        for blob in self._blobservice.list_blobs(
+            self.uuid,
+            prefix=self.annotations_key_prefix
+        ):
+            annotation_file = blob.name.rsplit('/', 1)[-1]
+            annotation_name, ext = annotation_file.split('.')
+            annotation_names.append(annotation_name)
+
+        return annotation_names
 
     def put_item(self, fpath, relpath):
 
