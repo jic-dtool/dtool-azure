@@ -5,6 +5,7 @@ from . import tmp_uuid_and_uri  # NOQA
 from . import CONFIG_PATH
 from . import TEST_SAMPLE_DATA
 
+
 def test_http_manifest():
 
     uri = "azure://dtooltesting/c58038a4-3a54-425e-9087-144d0733387f"
