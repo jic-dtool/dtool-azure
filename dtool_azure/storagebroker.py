@@ -68,7 +68,7 @@ This file: README.txt
 Structural metadata describing the dataset: structure.json
 Structural metadata describing the data items: manifest.json
 Per item descriptive metadata prefixed by: overlays/
-Dataset key/value pairs metadata prefixed by: $UUID/annotations/
+Dataset key/value pairs metadata prefixed by: annotations/
 """
 
 
