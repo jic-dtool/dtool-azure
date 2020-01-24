@@ -317,7 +317,7 @@ class AzureStorageBroker(BaseStorageBroker):
             prefix=self.annotations_key_prefix
         ):
             annotation_file = blob.name.rsplit('/', 1)[-1]
-            annotation_name, ext = annotation_file.split('.')
+            annotation_name, ext = annotation_file.rsplit('.', 1)
             annotation_names.append(annotation_name)
 
         return annotation_names
