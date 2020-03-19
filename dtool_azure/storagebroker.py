@@ -416,7 +416,6 @@ class AzureStorageBroker(BaseStorageBroker):
         except AzureMissingResourceHttpError:
             pass
 
-
     def get_item_abspath(self, identifier):
         """Return absolute path at which item content can be accessed.
 
