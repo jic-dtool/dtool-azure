@@ -12,9 +12,9 @@ Added support for tags.
 Added
 ^^^^^
 
-- Added ``dtool_azure.storagebroker.delete_key()`` method
-- Added ``dtool_azure.storagebroker.get_tag_key()`` method
-- Added ``dtool_azure.storagebroker.list_tags()`` method
+- Added ``dtool_azure.storagebroker.AzureStorageBroker.delete_key()`` method
+- Added ``dtool_azure.storagebroker.AzureStorageBroker.get_tag_key()`` method
+- Added ``dtool_azure.storagebroker.AzureStorageBroker.list_tags()`` method
 
 
 Changed
@@ -31,6 +31,10 @@ Removed
 
 Fixed
 ^^^^^
+
+- Made
+  ``dtool_azure.storagebroker.AzureStorageBroker.list_dataset_uris``
+  more robust in cases where there is a container without metadata
 
 Security
 ^^^^^^^^
