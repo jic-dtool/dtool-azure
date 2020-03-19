@@ -18,6 +18,8 @@ TEST_SAMPLE_DATA = os.path.join(_HERE, "data")
 
 CONFIG_PATH = os.path.expanduser("~/.config/dtool/dtool.json")
 
+AZURE_TEST_BASE_URI = os.getenv("AZURE_TEST_BASE_URI", "azure://dtooltesting")
+
 
 @contextmanager
 def tmp_env_var(key, value):
@@ -73,7 +75,7 @@ def tmp_uuid_and_uri(request):
     uri = AzureStorageBroker.generate_uri(
         "test_dataset",
         uuid,
-        "azure://dtooltesting"
+        AZURE_TEST_BASE_URI
     )
 
     @request.addfinalizer
