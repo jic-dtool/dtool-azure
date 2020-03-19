@@ -163,6 +163,8 @@ class AzureStorageBroker(BaseStorageBroker):
                 ann_fpath
             )
 
+        tags = self.list_tags()
+
         manifest = self.get_manifest()
         item_urls = {}
         for identifier in manifest["items"]:
@@ -176,6 +178,7 @@ class AzureStorageBroker(BaseStorageBroker):
             "item_urls": item_urls,
             "overlays": overlays,
             "annotations": annotations,
+            "tags": tags,
             "readme_url": readme_url,
             "manifest_url": manifest_url
         }
