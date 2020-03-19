@@ -213,6 +213,10 @@ class AzureStorageBroker(BaseStorageBroker):
         for c in containers:
             admin_metadata = c.metadata
 
+            # Ignore containers without metadata.
+            if len(admin_metadata) == 0:
+                continue
+
             uri = cls.generate_uri(
                 admin_metadata['name'],
                 admin_metadata['uuid'],
