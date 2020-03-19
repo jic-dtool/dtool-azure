@@ -32,6 +32,7 @@ _STRUCTURE_PARAMETERS = {
     "fragments_key_prefix": "fragments/",
     "overlays_key_prefix": "overlays/",
     "annotations_key_prefix": "annotations/",
+    "tags_key_prefix": "tags/",
     "dataset_readme_key": "README.yml",
     "manifest_key": "manifest.json",
     "structure_dict_key": "structure.json",
@@ -103,6 +104,9 @@ class AzureStorageBroker(BaseStorageBroker):
         self.overlays_key_prefix = self._generate_key('overlays_key_prefix')
         self.annotations_key_prefix = self._generate_key(
             'annotations_key_prefix'
+        )
+        self.tags_key_prefix = self._generate_key(
+            'tags_key_prefix'
         )
 
         self.http_manifest_key = self._generate_key("http_manifest_key")
@@ -208,6 +212,7 @@ class AzureStorageBroker(BaseStorageBroker):
         uri_list = []
         for c in containers:
             admin_metadata = c.metadata
+
             uri = cls.generate_uri(
                 admin_metadata['name'],
                 admin_metadata['uuid'],
@@ -239,6 +244,9 @@ class AzureStorageBroker(BaseStorageBroker):
 
     def get_annotation_key(self, annotation_name):
         return self.annotations_key_prefix + annotation_name + '.json'
+
+    def get_tag_key(self, tag):
+        return self.tags_key_prefix + tag
 
     def _create_structure(self):
 
@@ -305,6 +313,19 @@ class AzureStorageBroker(BaseStorageBroker):
             annotation_names.append(annotation_name)
 
         return annotation_names
+
+    def list_tags(self):
+        """Return list of tags."""
+
+        tags = []
+        for blob in self._blobservice.list_blobs(
+            self.uuid,
+            prefix=self.tags_key_prefix
+        ):
+            tag = blob.name.rsplit('/', 1)[-1]
+            tags.append(tag)
+
+        return tags
 
     def put_item(self, fpath, relpath):
 
@@ -377,6 +398,16 @@ class AzureStorageBroker(BaseStorageBroker):
             key,
             contents
         )
+
+    def delete_key(self, key):
+        try:
+            self._blobservice.delete_blob(
+                self.uuid,
+                key
+            )
+        except AzureMissingResourceHttpError:
+            pass
+
 
     def get_item_abspath(self, identifier):
         """Return absolute path at which item content can be accessed.
