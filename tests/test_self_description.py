@@ -37,6 +37,7 @@ def test_writing_of_dtool_structure_file(tmp_uuid_and_uri):  # NOQA
         'overlays_key_prefix': 'overlays/',
         'structure_dict_key': 'structure.json',
         'annotations_key_prefix': 'annotations/',
+        'tags_key_prefix': 'tags/',
         'admin_metadata_key': 'dtool',
         'storage_broker_version': __version__,
         'dtool_readme_key': 'README.txt',
