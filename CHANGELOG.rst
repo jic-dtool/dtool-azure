@@ -7,14 +7,9 @@ This change log uses principles from `keep a changelog <http://keepachangelog.co
 [Unreleased]
 ------------
 
-Added support for tags.
 
 Added
 ^^^^^
-
-- Added ``dtool_azure.storagebroker.AzureStorageBroker.delete_key()`` method
-- Added ``dtool_azure.storagebroker.AzureStorageBroker.get_tag_key()`` method
-- Added ``dtool_azure.storagebroker.AzureStorageBroker.list_tags()`` method
 
 
 Changed
@@ -32,12 +27,29 @@ Removed
 Fixed
 ^^^^^
 
-- Made
-  ``dtool_azure.storagebroker.AzureStorageBroker.list_dataset_uris``
-  more robust in cases where there is a container without metadata
 
 Security
 ^^^^^^^^
+
+
+[0.7.0] - 2020-03-19
+--------------------
+
+Added support for tags.
+
+Added
+^^^^^
+
+- Added ``dtool_azure.storagebroker.AzureStorageBroker.delete_key()`` method
+- Added ``dtool_azure.storagebroker.AzureStorageBroker.get_tag_key()`` method
+- Added ``dtool_azure.storagebroker.AzureStorageBroker.list_tags()`` method
+
+Fixed
+^^^^^
+
+- Made
+  ``dtool_azure.storagebroker.AzureStorageBroker.list_dataset_uris``
+  more robust in cases where there is a container without metadata
 
 
 [0.6.0] - 2019-10-31
