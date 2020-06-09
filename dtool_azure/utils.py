@@ -3,7 +3,7 @@
 import base64
 import binascii
 
-from azure.storage.blob import BlockBlobService
+from azure.storage.common import CloudStorageAccount
 
 from dtoolcore.utils import get_config_value
 
@@ -41,7 +41,10 @@ def get_blob_service(storage_account_name, config_path):
 
         raise(KeyError(". ".join(message)))
 
-    return BlockBlobService(
+
+    account = CloudStorageAccount(
         account_name=storage_account_name,
         account_key=account_key
     )
+
+    return account.create_block_blob_service()
