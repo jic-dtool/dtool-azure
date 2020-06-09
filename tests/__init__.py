@@ -18,7 +18,7 @@ TEST_SAMPLE_DATA = os.path.join(_HERE, "data")
 
 CONFIG_PATH = os.path.expanduser("~/.config/dtool/dtool.json")
 
-AZURE_TEST_BASE_URI = os.getenv("AZURE_TEST_BASE_URI", "azure://dtooltesting")
+AZURE_TEST_BASE_URI = os.getenv("AZURE_TEST_BASE_URI", "azure://dtoolazuretesting")
 
 
 @contextmanager
