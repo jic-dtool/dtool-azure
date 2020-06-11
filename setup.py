@@ -16,7 +16,8 @@ setup(
     url=url,
     install_requires=[
         "dtoolcore>=3.17",
-        "azure-storage"
+        "azure-storage-blob==2.1.0",
+	"azure-storage-common==2.1.0"
     ],
     entry_points={
         "dtool.storage_brokers": [
